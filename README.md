@@ -1,18 +1,24 @@
-# BlackFeed
-> BlackFeed is a micro python library that allows you download and upload files concurrently.
-> You can download your files locally but you can also upload them to your cloud without writing them to disk.
+Downloader light
+================
 
-### Packages required
+> Lightweight python library that let's you download and process files concurrently.  
+> This package was developed to allows serverless deployment.
+
+#### Dependencies
 > Installed automatically with **pip**
 - requests
-- boto3
+- pysftp
 
-## Install
+
+ * [Installation](#installation)
+ * [Usage examples](#usage-examples)
+
+## Installation
 ```bash
-pip install blackfeed
+pip install downloader-light
 ```
 
-## Usage
+## Usage examples
 Download and upload files to AWS S3
 **For this to work, AWS CLI must be configured**
 ```python
@@ -22,10 +28,10 @@ from blackfeed.adapter.s3 import S3Adapter
 queue = [
     {
         'url': 'https://www.example.com/path/to/image.jpg', # Required
-        'destination': 'some/key/image.jpg' # S3 key - Required 
+        'destination': 'some/key/image.jpg' # S3 key - Required
     },{
         'url': 'https://www.example.com/path/to/image2.jpg',
-        'destination': 'some/key/image2.jpg' 
+        'destination': 'some/key/image2.jpg'
     }
 ]
 
@@ -75,14 +81,14 @@ downloader.set_callback(callback)
 
 downloader.load_states('filename') # This will load states from "filename.txt"
 downloader.process(queue)
-stats = downloader.get_stats() # Statistics 
+stats = downloader.get_stats() # Statistics
 ```
 
 ## ElasticDownloader
 > Let's you to download/retrieve files from FTP, SFTP and HTTP/S servers easily.
 
 ### Examples
-#### Downloading file from FTP 
+#### Downloading file from FTP
 ```python
 from blackfeed.elasticdownloader import ElasticDownloader
 
