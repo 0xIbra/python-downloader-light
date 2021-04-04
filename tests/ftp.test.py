@@ -1,6 +1,6 @@
-from blackfeed.elasticdownloader import ElasticDownloader
+from downloader.elasticdownloader import ElasticDownloader
 
-uri = 'ftp://demo-user:demo-user@demo.wftpserver.com/download/manual_en.pdf'
+uri = 'ftp://phpunit:Ma8cdWG@flux.publi-car.fr/astronaut_spacesuit_reflection_144426_1920x1200.png'
 
 retriever = ElasticDownloader()
 res = retriever.retrieve(uri)

@@ -1,6 +1,8 @@
 from ftplib import FTP as FTPSession
 from io import BytesIO
-import os, tempfile
+import tempfile
+import os
+
 
 class FTP:
 
@@ -10,20 +12,20 @@ class FTP:
         if user is not None and password is not None:
             self.client.login(user, password)
 
-    def download(self, path, localpath=None):
+    def download(self, path, local_path=None):
         directory = os.path.dirname(path)
-        filename  = os.path.basename(path)
-        localfilepath = os.path.join(tempfile.gettempdir(), filename)
+        filename = os.path.basename(path)
+        local_file_path = os.path.join(tempfile.gettempdir(), filename)
 
-        if localpath is not None and localpath != '':
-            if os.path.isdir(localpath):
-                localfilepath = os.path.join(localpath, filename)
+        if local_path is not None and local_path != '':
+            if os.path.isdir(local_path):
+                local_file_path = os.path.join(local_path, filename)
 
         if directory != '':
             self.client.cwd(directory)
         
         try:
-            output = self.client.retrbinary('RETR ' + filename, open(localfilepath, 'wb').write)
+            output = self.client.retrbinary('RETR ' + filename, open(local_file_path, 'wb').write)
             if not output.startswith('226'):
                 # raise Exception('[error] Could not download file from FTP')
                 print('[error] Could not download file')
@@ -31,7 +33,7 @@ class FTP:
 
                 return False
 
-            return localfilepath
+            return local_file_path
         except Exception as e:
             # raise Exception('[error] ', e)
             print('[error] ', e)
@@ -46,11 +48,11 @@ class FTP:
             self.client.cwd(directory)
         
         try:
-            binarycontent = BytesIO()
+            binary_content = BytesIO()
             cmd = 'RETR {}'.format(filename)
-            self.client.retrbinary(cmd, binarycontent.write)
+            self.client.retrbinary(cmd, binary_content.write)
 
-            return binarycontent
+            return binary_content
         except Exception as e:
             print('[error] ', e)
 

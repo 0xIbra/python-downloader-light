@@ -1,6 +1,6 @@
-from blackfeed.elasticdownloader import ElasticDownloader
+from downloader.elasticdownloader import ElasticDownloader
 
-uri = 'https://i.picsum.photos/id/881/800/600.jpg'
+uri = 'https://i.picsum.photos/id/84/536/354.jpg?hmac=sZKPCkAEBdGnNortqWOUnZFzC702PRotKIlEkWN6GXo'
 
 retriever = ElasticDownloader()
 # retriever.download(uri, '.')

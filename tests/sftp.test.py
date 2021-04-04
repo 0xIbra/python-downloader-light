@@ -1,4 +1,4 @@
-from blackfeed.elasticdownloader import ElasticDownloader
+from downloader.elasticdownloader import ElasticDownloader
 
 uri = 'sftp://foo:pass@127.0.0.1:22/data/notes.txt'
 

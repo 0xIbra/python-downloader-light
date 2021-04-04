@@ -12,8 +12,8 @@ class Downloader:
     session = None
     __callback = None
 
-    def __init__(self, adapter, multi=False, bulksize=50, stateless=True, state_id=None, verbose=False, auto_save_states=False):
-        self.adapter = adapter
+    def __init__(self, processed_callback, multi=False, bulksize=50, stateless=True, state_id=None, verbose=False, auto_save_states=False):
+        self.__process_callback = processed_callback
         self.multi = multi
         self.bulksize = bulksize
 
@@ -195,7 +195,7 @@ class Downloader:
                         self.stats['downloads']['total_successes'] += 1
                         it += 1
 
-                stats = self.adapter.process(adapter_queue)
+                stats = self.__process_callback(adapter_queue)
                 self.handle_upload_stats(stats)
                 adapter_queue.clear()
                 download_queue.clear()
@@ -276,7 +276,7 @@ class Downloader:
                     self.stats['downloads']['successes'][it] = response
                     self.stats['downloads']['total_successes'] += 1
 
-            stats = self.adapter.process(adapter_queue)
+            stats = self.__process_callback(adapter_queue)
             self.handle_upload_stats(stats)
             adapter_queue.clear()
             download_queue.clear()
@@ -355,7 +355,7 @@ class Downloader:
                 return False
 
             print('[info] Starting to execute adapter...')
-            stats = self.adapter.process(upload_queue)
+            stats = self.__process_callback(upload_queue)
             self.handle_upload_stats(stats)
 
         except Exception as e:
@@ -368,7 +368,7 @@ class Downloader:
             self.session = RequestSession()
 
         try:
-            headers = { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3' }
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
             url = item['url']
             request = self.session.get(url, headers=headers)
             response = {
@@ -380,11 +380,11 @@ class Downloader:
             if request.ok:
                 response['content'] = request.content
 
-            return { 'item': item, 'response': response }
+            return {'item': item, 'response': response}
         except RequestException as e:
             print('[error]', e)
 
-            return { 'item': item, 'response': { 'status': False, 'error': e, 'url': item['url'] } }
+            return {'item': item, 'response': {'status': False, 'error': e, 'url': item['url']}}
 
     def handle_upload_stats(self, stats):
         """ Appends upload stats to the local stats variable. """

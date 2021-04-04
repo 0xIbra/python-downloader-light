@@ -1,5 +1,8 @@
 from io import BytesIO
-import pysftp, os, tempfile
+import pysftp
+import os
+import tempfile
+
 
 class SFTP:
 
@@ -8,41 +11,41 @@ class SFTP:
         cnopts.hostkeys = None
         self.client = pysftp.Connection(host, username=user, password=password, port=port, cnopts=cnopts)
 
-    def download(self, path, localpath=None):
+    def download(self, path, local_path=None):
         filename = os.path.basename(path)
-        localfilepath = os.path.join(tempfile.gettempdir(), filename)
-        if localpath is not None and os.path.isdir(localpath):
-            localfilepath = os.path.join(localpath, filename)
+        local_file_path = os.path.join(tempfile.gettempdir(), filename)
+        if local_path is not None and os.path.isdir(local_path):
+            local_file_path = os.path.join(local_path, filename)
 
         if not self.client.isfile(path):
             return False
 
         try:
-            self.client.get(path, localfilepath)
+            self.client.get(path, local_file_path)
 
-            if not os.path.isfile(localfilepath):
+            if not os.path.isfile(local_file_path):
                 return False
 
-            return localfilepath
+            return local_file_path
         except Exception as e:
             print('[error] ', e)
 
             return False
 
     def retrieve(self, path):
-        binarycontent = BytesIO()
+        binary_content = BytesIO()
         if not self.client.isfile(path):
             print('[error] File "{}" does not exist on remote server'.format(path))
             return False
 
         try:
-            self.client.getfo(path, binarycontent)
+            self.client.getfo(path, binary_content)
         except Exception as e:
             print('[error] ', e)
 
             return False
 
-        return binarycontent
+        return binary_content
 
     def close(self):
         self.client.close()
